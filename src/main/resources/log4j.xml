@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration debug="false">
+    <property resource="application.properties"/>
+    <!--引入springboot的默认配置-->
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <!-- 特定过滤含有某字符串的日志 -->
+    <appender name="cons" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return message.contains("ACT_RU_JOB") ||
+                    message.contains("ACT_GE_PROPERTY") ||
+                    message.contains("select 'x'") ||
+                    message.contains("qrtz_") ||
+                    message.contains("select 1");
+                </expression>
+            </evaluator>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>%replace(${CONSOLE_LOG_PATTERN}){'com\.zaxxer\.hikari\.pool\.ProxyPreparedStatement.*\(.*\)','sql语句：'}
+            </pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <FileNamePattern>${log.log_home}/%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!--日志文件保留天数-->
+            <MaxHistory>7</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+        <!--日志文件最大的大小-->
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>100MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+
+    <logger name="org.springframework.web" level="INFO"/>
+    <logger name="jdbc.sqlonly" level="DEBUG" additivity="true">
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <!--log4jdbc 日志配置-->
+    <logger name="jdbc.connection" level="WARN"/>
+    <logger name="jdbc.audit" level="WARN"/>
+    <logger name="jdbc.resultset" level="WARN"/>
+    <logger name="jdbc.sqlonly" level="WARN"/>
+    <logger name="jdbc.sqltiming" level="INFO"/>
+    <logger name="jdbc.resultsettable" level="INFO"/>
+
+    <!-- 根据需要关闭不必要的日志输出 -->
+    <!-- 记录数据库连接和释放信息，可记录当前的数据库连接数，便于诊断连接是否释放-->
+    <logger name="jdbc.connection" level="OFF"/>
+    <!--记录除了ResultSet外的所有JDBC调用情况，一般不需要-->
+    <logger name="jdbc.audit" level="OFF"/>
+    <!--记录返回结果集信息-->
+    <logger name="jdbc.resultset" level="OFF"/>
+    <!--记录系统执行过的sql语句-->
+    <logger name="jdbc.sqlonly" level="ON" additivity="false">
+        <appender-ref ref="cons"/>
+    </logger>
+    <!--记录sql执行的时间，可以分析耗时的sql语句-->
+    <logger name="jdbc.sqltiming" level="OFF"/>
+    <logger name="jdbc.resultsettable" level="OFF"/>
+    <!--自定义排除不需要显示的日志-->
+    <!--排除 开始-->
+    <logger name="springfox.documentation.spring.web" level="OFF"/>
+    <logger name="org.springframework.data" level="OFF"/>
+    <logger name="org.springframework.context.support" level="OFF"/>
+    <logger name="org.springframework.boot.web.servlet.FilterRegistrationBean" level="OFF"/>
+    <logger name="org.springframework.web.servlet.mvc.method.annotation" level="OFF"/>
+    <logger name="org.springframework.boot.actuate.endpoint.mvc" level="OFF"/>
+    <logger name="org.hibernate" level="OFF"/>
+    <!--排除 结束-->
+</configuration>

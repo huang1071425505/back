@@ -1,0 +1,32 @@
+2020-01-08 10:16:56.150 [http-nio-5000-exec-1] DEBUG jdbc.sqlonly -  com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+1. select sysusers0_.user_id as user_id1_0_, sysusers0_.user_code as user_cod2_0_, sysusers0_.user_name 
+as user_nam3_0_, sysusers0_.user_password as user_pas4_0_ from sys_users sysusers0_ 
+
+2020-01-08 11:23:48.950 [http-nio-5000-exec-1] DEBUG jdbc.sqlonly -  com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+1. select sysusers0_.user_id as user_id1_0_, sysusers0_.user_code as user_cod2_0_, sysusers0_.user_name 
+as user_nam3_0_, sysusers0_.user_password as user_pas4_0_ from sys_users sysusers0_ 
+
+2020-01-08 11:23:55.021 [http-nio-5000-exec-2] DEBUG jdbc.sqlonly -  com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+1. select sysusers0_.user_id as user_id1_0_, sysusers0_.user_code as user_cod2_0_, sysusers0_.user_name 
+as user_nam3_0_, sysusers0_.user_password as user_pas4_0_ from sys_users sysusers0_ 
+
+2020-01-08 11:24:09.263 [http-nio-5000-exec-6] DEBUG jdbc.sqlonly -  com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+1. select sysusers0_.user_id as user_id1_0_, sysusers0_.user_code as user_cod2_0_, sysusers0_.user_name 
+as user_nam3_0_, sysusers0_.user_password as user_pas4_0_ from sys_users sysusers0_ 
+
+2020-01-08 11:26:29.222 [http-nio-5000-exec-3] DEBUG jdbc.sqlonly -  com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+1. select sysusers0_.user_id as user_id1_0_, sysusers0_.user_code as user_cod2_0_, sysusers0_.user_name 
+as user_nam3_0_, sysusers0_.user_password as user_pas4_0_ from sys_users sysusers0_ 
+
+2020-01-08 11:29:14.055 [http-nio-5000-exec-7] DEBUG jdbc.sqlonly -  com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+1. select sysusers0_.user_id as user_id1_0_, sysusers0_.user_code as user_cod2_0_, sysusers0_.user_name 
+as user_nam3_0_, sysusers0_.user_password as user_pas4_0_ from sys_users sysusers0_ 
+
+2020-01-08 11:29:35.886 [http-nio-5000-exec-8] DEBUG jdbc.sqlonly -  com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+1. select sysusers0_.user_id as user_id1_0_, sysusers0_.user_code as user_cod2_0_, sysusers0_.user_name 
+as user_nam3_0_, sysusers0_.user_password as user_pas4_0_ from sys_users sysusers0_ 
+
+2020-01-08 13:08:33.054 [http-nio-5000-exec-1] DEBUG jdbc.sqlonly -  com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+1. select sysusers0_.user_id as user_id1_0_, sysusers0_.user_code as user_cod2_0_, sysusers0_.user_name 
+as user_nam3_0_, sysusers0_.user_password as user_pas4_0_ from sys_users sysusers0_ 
+

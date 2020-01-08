@@ -1,0 +1,4 @@
+2020-01-08 10:13:27.807 [http-nio-5000-exec-1] DEBUG jdbc.sqlonly -  com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+1. select sysusers0_.user_id as user_id1_0_, sysusers0_.user_code as user_cod2_0_, sysusers0_.user_name 
+as user_nam3_0_, sysusers0_.user_password as user_pas4_0_ from sys_users sysusers0_ 
+
