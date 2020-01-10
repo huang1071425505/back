@@ -14,6 +14,5 @@ public class ResponseResult {
     private String code;
     private String msg;
     private Object data;
-    private Object pra;
 
 }

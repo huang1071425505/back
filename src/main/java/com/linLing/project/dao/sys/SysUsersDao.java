@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface SysUsersDao extends JpaRepository<SysUsers, Integer>, JpaSpecificationExecutor<SysUsers> {
+    SysUsers findOneByUserCode(String userCode);
 }
