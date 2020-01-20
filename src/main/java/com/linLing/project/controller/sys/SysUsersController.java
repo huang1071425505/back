@@ -6,6 +6,7 @@ import com.linLing.project.po.ResponseResult;
 import com.linLing.project.po.SysUsers;
 import com.linLing.project.utils.CommonUtil;
 import com.linLing.project.utils.CryptosUtil;
+import com.linLing.project.utils.SessionUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/sysUsers")
 @Transactional
-public class SysUsersController {
+public class SysUsersController extends SessionUtil {
     /**
      * 返回结果
      */
@@ -31,6 +32,7 @@ public class SysUsersController {
     @RequestMapping(value = "/myInfo", method = RequestMethod.GET)
     public ResponseResult info() {
         try {
+            getSysUsers().getUserName();
             result = CommonUtil.setResult("0", "查询成功", dao.findAll());
         } catch (Exception ex) {
             result = CommonUtil.setResult("1", ex.getMessage(), null);
@@ -50,6 +52,7 @@ public class SysUsersController {
                 if(sysUsers.getUserPassword().equals(CryptosUtil.sha(password))){
                     if("1".equals(sysUsers.getUserState())){
 //                        SecurityUtils.getSubject().getSession().setAttribute("user",sysUsers);
+                        setSysUsers(sysUsers);
                         //创建jwt令牌
                         String jwt = CryptosUtil.jwt(userCode);
                         result = CommonUtil.setResult("0", jwt , sysUsers);

@@ -5,29 +5,15 @@ import javax.persistence.*;
 @Entity
 @Table(name = "sys_users", schema = "linling", catalog = "")
 public class SysUsers {
-
-    @Id
-    @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
-
-    @Basic
-    @Column(name = "user_code")
     private String userCode;
-
-
-    @Basic
-    @Column(name = "user_name")
     private String userName;
-
-
-    @Basic
-    @Column(name = "user_password")
     private String userPassword;
     private String userState;
 
     @Id
     @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getUserId() {
         return userId;
     }
