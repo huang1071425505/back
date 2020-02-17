@@ -15,7 +15,7 @@ public class WebMvcConfig  extends WebMvcConfigurationSupport {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(tokenInterceptorUtil).addPathPatterns("/sysUsers/*").excludePathPatterns("/sysUsers/logout");
+        registry.addInterceptor(tokenInterceptorUtil).addPathPatterns("/sysUsers/*").excludePathPatterns("/sysUsers/logout","/sysUsers/login");
         super.addInterceptors(registry);
     }
 
