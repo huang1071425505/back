@@ -2,6 +2,7 @@ package com.linLing.project.controller.sys;
 
 
 import com.linLing.project.dao.sys.SysUsersDao;
+import com.linLing.project.po.PageParameter;
 import com.linLing.project.po.ResponseResult;
 import com.linLing.project.po.SysUsers;
 import com.linLing.project.utils.CommonUtil;
@@ -10,6 +11,7 @@ import com.linLing.project.utils.SessionUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,17 +34,30 @@ public class SysUsersController extends SessionUtil {
     @RequestMapping(value = "/myInfo", method = RequestMethod.GET)
     public ResponseResult info() {
         try {
-            getSysUsers().getUserName();
-            result = CommonUtil.setResult("0", "查询成功", dao.findAll());
+            int userId= getSysUsers().getUserId();
+            result = CommonUtil.setResult("0", "查询成功", dao.findById(userId));
         } catch (Exception ex) {
             result = CommonUtil.setResult("1", ex.getMessage(), null);
         }
-
+        return result;
+    }
+    /**
+     * 获取用户列表
+     */
+    @RequestMapping(value = "/userList", method = RequestMethod.POST)
+    public ResponseResult userList(@RequestBody PageParameter pageParameter) {
+        try {
+            result = CommonUtil.setResult("0", "查询成功", dao.userList(pageParameter));
+        } catch (Exception ex) {
+            result = CommonUtil.setResult("1", ex.getMessage(), null);
+        }
         return result;
     }
 
     /**
      * 用户登录
+     * userCode 用户名
+     * password 密码
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseResult login(String userCode, String password) {
