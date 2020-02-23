@@ -79,7 +79,8 @@ public class SysUsersController extends SessionUtil {
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public ResponseResult logout() {
         try {
-            result = CommonUtil.setResult("0", "查询成功", dao.findAll());
+            removeSysUsers();
+            result = CommonUtil.setResult("0", "登出成功","");
         } catch (Exception ex) {
             result = CommonUtil.setResult("1", ex.getMessage(), null);
         }

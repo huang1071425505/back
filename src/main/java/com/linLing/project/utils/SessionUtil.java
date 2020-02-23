@@ -33,4 +33,9 @@ public abstract class SessionUtil {
             session.setMaxInactiveInterval(30 * 60);
         }
     }
+
+    public void removeSysUsers() {
+        HttpSession session = getRequest().getSession();
+        session.removeAttribute(ACCOUNT);
+    }
 }
