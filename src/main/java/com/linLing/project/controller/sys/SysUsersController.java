@@ -1,20 +1,24 @@
 package com.linLing.project.controller.sys;
 
 
+import com.linLing.project.dao.DataBase;
 import com.linLing.project.dao.sys.SysUsersDao;
 import com.linLing.project.po.PageParameter;
+import com.linLing.project.po.Pages;
 import com.linLing.project.po.ResponseResult;
 import com.linLing.project.po.SysUsers;
 import com.linLing.project.utils.CommonUtil;
 import com.linLing.project.utils.CryptosUtil;
 import com.linLing.project.utils.SessionUtil;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/sysUsers")
@@ -27,6 +31,9 @@ public class SysUsersController extends SessionUtil {
 
     @Autowired
     private SysUsersDao dao;
+
+    @Autowired
+    private DataBase dataBase;
 
     /**
      * 获取本人信息
@@ -47,7 +54,17 @@ public class SysUsersController extends SessionUtil {
     @RequestMapping(value = "/userList", method = RequestMethod.POST)
     public ResponseResult userList(@RequestBody PageParameter pageParameter) {
         try {
-            result = CommonUtil.setResult("0", "查询成功", dao.userList(pageParameter));
+            //sql
+            String sqlStr ="SELECT * FROM sys_users where user_state = 1";
+            List<Object> list = new ArrayList<>();
+            //查询
+            //用户名称
+            if (!"".equals(pageParameter.getParameters().get("userName")) && null != pageParameter.getParameters().get("userName")) {
+                sqlStr += "\tAND user_name LIKE ?\n";
+                list.add("%" + pageParameter.getParameters().get("userName") + "%");
+            }
+            final Pages pages = dataBase.findSql(sqlStr, list.toArray(), pageParameter.getPage(), pageParameter.getSize(), pageParameter.getSort(), pageParameter.getDir());
+            result = CommonUtil.setResult("0", "查询成功", pages);
         } catch (Exception ex) {
             result = CommonUtil.setResult("1", ex.getMessage(), null);
         }
