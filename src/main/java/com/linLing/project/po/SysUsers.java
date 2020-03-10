@@ -1,6 +1,7 @@
 package com.linLing.project.po;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "sys_users", schema = "linling", catalog = "")
@@ -10,9 +11,12 @@ public class SysUsers {
     private String userName;
     private String userPassword;
     private String userState;
+    private String userPhone;
+    private Integer userRoleId;
+    private String userDetails;
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getUserId() {
         return userId;
@@ -23,7 +27,7 @@ public class SysUsers {
     }
 
     @Basic
-    @Column(name = "user_code")
+    @Column(name = "user_code", nullable = true, length = 50)
     public String getUserCode() {
         return userCode;
     }
@@ -33,7 +37,7 @@ public class SysUsers {
     }
 
     @Basic
-    @Column(name = "user_name")
+    @Column(name = "user_name", nullable = true, length = 50)
     public String getUserName() {
         return userName;
     }
@@ -43,7 +47,7 @@ public class SysUsers {
     }
 
     @Basic
-    @Column(name = "user_password")
+    @Column(name = "user_password", nullable = true, length = 100)
     public String getUserPassword() {
         return userPassword;
     }
@@ -53,12 +57,62 @@ public class SysUsers {
     }
 
     @Basic
-    @Column(name = "user_state")
+    @Column(name = "user_state", nullable = true, length = 1)
     public String getUserState() {
         return userState;
     }
 
     public void setUserState(String userState) {
         this.userState = userState;
+    }
+
+    @Basic
+    @Column(name = "user_phone", nullable = true, length = 50)
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
+    }
+
+    @Basic
+    @Column(name = "user_role_id", nullable = true)
+    public Integer getUserRoleId() {
+        return userRoleId;
+    }
+
+    public void setUserRoleId(Integer userRoleId) {
+        this.userRoleId = userRoleId;
+    }
+
+    @Basic
+    @Column(name = "user_details", nullable = true, length = -1)
+    public String getUserDetails() {
+        return userDetails;
+    }
+
+    public void setUserDetails(String userDetails) {
+        this.userDetails = userDetails;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SysUsers sysUsers = (SysUsers) o;
+        return userId == sysUsers.userId &&
+                Objects.equals(userCode, sysUsers.userCode) &&
+                Objects.equals(userName, sysUsers.userName) &&
+                Objects.equals(userPassword, sysUsers.userPassword) &&
+                Objects.equals(userState, sysUsers.userState) &&
+                Objects.equals(userPhone, sysUsers.userPhone) &&
+                Objects.equals(userRoleId, sysUsers.userRoleId) &&
+                Objects.equals(userDetails, sysUsers.userDetails);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, userCode, userName, userPassword, userPhone, userRoleId, userDetails, userState);
     }
 }
