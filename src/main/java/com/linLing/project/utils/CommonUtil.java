@@ -2,13 +2,21 @@ package com.linLing.project.utils;
 
 import com.linLing.project.po.ResponseResult;
 
+import java.lang.reflect.Field;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.log4j.Logger;
+
 
 /**
  * 公用方法
  */
 public class CommonUtil {
+    /**
+     * logger
+     */
+    private static final Logger logger = Logger.getLogger(CommonUtil.class);
+
     public static ResponseResult setResult(String code, String msg, Object data) {
         ResponseResult result = new ResponseResult();
         result.setCode(code);
@@ -50,5 +58,29 @@ public class CommonUtil {
         }
         matcher.appendTail(sb);
         return sb.toString();
+    }
+
+    /**
+     * 合并数据
+     *
+     * @param newOne 新数据
+     * @param oldOne 旧数据
+     * @param <T>    泛型
+     * @return 合并后的oldOne
+     */
+    public static <T> T mergeObject(T newOne, T oldOne) {
+        for (Field f : newOne.getClass().getDeclaredFields()
+        ) {
+            try {
+                f.setAccessible(true);
+                Object o = f.get(newOne);
+                if (null != o) {
+                    f.set(oldOne, o);
+                }
+            } catch (IllegalAccessException e) {
+                logger.error(e.getMessage());
+            }
+        }
+        return oldOne;
     }
 }

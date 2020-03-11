@@ -6,7 +6,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "sc_policy", schema = "linling", catalog = "")
 public class ScPolicy {
-    private int id;
+    private Integer id;
     private String policyName;
     private String releaseBm;
     private String policyContent;
@@ -15,11 +15,12 @@ public class ScPolicy {
 
     @Id
     @Column(name = "id", nullable = false)
-    public int getId() {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

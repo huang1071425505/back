@@ -12,11 +12,9 @@ import com.linLing.project.utils.CryptosUtil;
 import com.linLing.project.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +46,7 @@ public class SysUsersController extends SessionUtil {
         }
         return result;
     }
+
     /**
      * 获取用户列表
      */
@@ -65,6 +64,47 @@ public class SysUsersController extends SessionUtil {
             }
             final Pages pages = dataBase.findSql(sqlStr, list.toArray(), pageParameter.getPage(), pageParameter.getSize(), pageParameter.getSort(), pageParameter.getDir());
             result = CommonUtil.setResult("0", "查询成功", pages);
+        } catch (Exception ex) {
+            result = CommonUtil.setResult("1", ex.getMessage(), null);
+        }
+        return result;
+    }
+
+    /**
+     * 用户信息保存
+     */
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public ResponseResult save(SysUsers sysUsers) {
+        try {
+            if (sysUsers.getUserId() != null) {
+                SysUsers searchSysUsers = dao.findById(sysUsers.getUserId()).get();
+                result = CommonUtil.setResult("0", "修改成功", dao.save(CommonUtil.mergeObject(sysUsers, searchSysUsers)));
+            } else {
+                sysUsers.setUserState("1");
+                sysUsers.setUserPassword("82ug05b311fs6kb56afa3vqsbr5tnfnf");
+                SysUsers data = dao.saveAndFlush(sysUsers);
+                result = CommonUtil.setResult("0", "保存成功",data);
+            }
+        } catch (Exception ex) {
+            result = CommonUtil.setResult("1", ex.getMessage(), null);
+        }
+        return result;
+    }
+
+    /**
+     * 用户信息（冻结/启用）
+     */
+    @RequestMapping(value = "/state/{id}", method = RequestMethod.GET)
+    public ResponseResult delete(@PathVariable int id) {
+        try {
+            SysUsers sysUsers = dao.findById(id).get();
+            if ("0".equals(sysUsers.getUserState())){
+                sysUsers.setUserState("1");
+            }else{
+                sysUsers.setUserState("0");
+            }
+            dao.save(sysUsers);
+            result = CommonUtil.setResult("0", "删除成功", "");
         } catch (Exception ex) {
             result = CommonUtil.setResult("1", ex.getMessage(), null);
         }

@@ -6,7 +6,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "sys_users", schema = "linling", catalog = "")
 public class SysUsers {
-    private int userId;
+    private Integer userId;
     private String userCode;
     private String userName;
     private String userPassword;
@@ -18,11 +18,11 @@ public class SysUsers {
     @Id
     @Column(name = "user_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 

@@ -6,7 +6,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "sys_role", schema = "linling", catalog = "")
 public class SysRole {
-    private int roleId;
+    private Integer roleId;
     private String roleCode;
     private String roleName;
     private String roleDetails;
@@ -14,11 +14,12 @@ public class SysRole {
 
     @Id
     @Column(name = "role_id", nullable = false)
-    public int getRoleId() {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Integer getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(int roleId) {
+    public void setRoleId(Integer roleId) {
         this.roleId = roleId;
     }
 
