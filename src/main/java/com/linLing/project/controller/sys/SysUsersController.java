@@ -48,6 +48,43 @@ public class SysUsersController extends SessionUtil {
     }
 
     /**
+     * userCode验证
+     */
+    @RequestMapping(value = "/yzUserCode/{userCode}", method = RequestMethod.GET)
+    public ResponseResult save(@PathVariable String userCode) {
+        try {
+            if(dao.yzuserCode(userCode)>0){
+                result = CommonUtil.setResult("1","存在重复code", null);
+            }else{
+                result = CommonUtil.setResult("0","验证通过", null);
+            }
+        } catch (Exception ex) {
+            result = CommonUtil.setResult("1", ex.getMessage(), null);
+        }
+        return result;
+    }
+
+    /**
+     * 用户信息（冻结/启用）
+     */
+    @RequestMapping(value = "/state/{id}", method = RequestMethod.GET)
+    public ResponseResult delete(@PathVariable int id) {
+        try {
+            SysUsers sysUsers = dao.findById(id).get();
+            if ("0".equals(sysUsers.getUserState())){
+                sysUsers.setUserState("1");
+            }else{
+                sysUsers.setUserState("0");
+            }
+            dao.save(sysUsers);
+            result = CommonUtil.setResult("0", "删除成功", "");
+        } catch (Exception ex) {
+            result = CommonUtil.setResult("1", ex.getMessage(), null);
+        }
+        return result;
+    }
+
+    /**
      * 获取用户列表
      */
     @RequestMapping(value = "/userList", method = RequestMethod.POST)
@@ -85,26 +122,6 @@ public class SysUsersController extends SessionUtil {
                 SysUsers data = dao.saveAndFlush(sysUsers);
                 result = CommonUtil.setResult("0", "保存成功",data);
             }
-        } catch (Exception ex) {
-            result = CommonUtil.setResult("1", ex.getMessage(), null);
-        }
-        return result;
-    }
-
-    /**
-     * 用户信息（冻结/启用）
-     */
-    @RequestMapping(value = "/state/{id}", method = RequestMethod.GET)
-    public ResponseResult delete(@PathVariable int id) {
-        try {
-            SysUsers sysUsers = dao.findById(id).get();
-            if ("0".equals(sysUsers.getUserState())){
-                sysUsers.setUserState("1");
-            }else{
-                sysUsers.setUserState("0");
-            }
-            dao.save(sysUsers);
-            result = CommonUtil.setResult("0", "删除成功", "");
         } catch (Exception ex) {
             result = CommonUtil.setResult("1", ex.getMessage(), null);
         }
