@@ -51,9 +51,26 @@ public class SysUsersController extends SessionUtil {
      * userCode验证
      */
     @RequestMapping(value = "/yzUserCode/{userCode}", method = RequestMethod.GET)
-    public ResponseResult save(@PathVariable String userCode) {
+    public ResponseResult yzUserCode(@PathVariable String userCode) {
         try {
             if(dao.yzuserCode(userCode)>0){
+                result = CommonUtil.setResult("1","存在重复code", null);
+            }else{
+                result = CommonUtil.setResult("0","验证通过", null);
+            }
+        } catch (Exception ex) {
+            result = CommonUtil.setResult("1", ex.getMessage(), null);
+        }
+        return result;
+    }
+
+    /**
+     * roleCode验证
+     */
+    @RequestMapping(value = "/yzRoleCode1/{userCode}/{userId}", method = RequestMethod.GET)
+    public ResponseResult yzRoleCode(@PathVariable String userCode,@PathVariable int userId) {
+        try {
+            if(dao.yzuserCode1(userCode,userId)>0){
                 result = CommonUtil.setResult("1","存在重复code", null);
             }else{
                 result = CommonUtil.setResult("0","验证通过", null);
@@ -118,7 +135,7 @@ public class SysUsersController extends SessionUtil {
                 result = CommonUtil.setResult("0", "修改成功", dao.save(CommonUtil.mergeObject(sysUsers, searchSysUsers)));
             } else {
                 sysUsers.setUserState("1");
-                sysUsers.setUserPassword("82ug05b311fs6kb56afa3vqsbr5tnfnf");
+                sysUsers.setUserPassword("7l7ins3to6v3hcgcqri6iid10sfpq3ht");
                 SysUsers data = dao.saveAndFlush(sysUsers);
                 result = CommonUtil.setResult("0", "保存成功",data);
             }
@@ -159,6 +176,26 @@ public class SysUsersController extends SessionUtil {
             result = CommonUtil.setResult("1", ex.getMessage(), null);
         }
 
+        return result;
+    }
+    /**
+     * 密码修改
+     */
+    @RequestMapping(value = "/exitPassword", method = RequestMethod.POST)
+    public ResponseResult exitPassword(String yPassword,String xPassword) {
+        try {
+            int userId= getSysUsers().getUserId();
+            SysUsers sysUsers=dao.findById(userId).get();
+            if(sysUsers.getUserPassword().equals(CryptosUtil.sha(yPassword))){
+                sysUsers.setUserPassword(CryptosUtil.sha(xPassword));
+                dao.save(sysUsers);
+                result = CommonUtil.setResult("0", "修改成功","");
+            }else{
+                result = CommonUtil.setResult("1", "原密码错误","");
+            }
+        } catch (Exception ex) {
+            result = CommonUtil.setResult("1", ex.getMessage(), null);
+        }
         return result;
     }
 

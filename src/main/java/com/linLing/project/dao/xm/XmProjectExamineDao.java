@@ -13,7 +13,6 @@ public interface XmProjectExamineDao extends JpaRepository<XmProjectExamine, Int
      * @param projectId
      * @return
      */
-    @Modifying
     @Query(value = "SELECT COUNT(*) from xm_project_examine WHERE project_id=?1 AND examine_state='0'",nativeQuery = true)
     int findOneByProjectIdAndExamineState(int projectId);
 }

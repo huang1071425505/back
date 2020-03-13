@@ -45,9 +45,26 @@ public class SysRoleController extends SessionUtil {
      * roleCode验证
      */
     @RequestMapping(value = "/yzRoleCode/{roleCode}", method = RequestMethod.GET)
-    public ResponseResult save(@PathVariable String roleCode) {
+    public ResponseResult yzRoleCode(@PathVariable String roleCode) {
         try {
             if(dao.yzroleCode(roleCode)>0){
+                result = CommonUtil.setResult("1","存在重复code", null);
+            }else{
+                result = CommonUtil.setResult("0","验证通过", null);
+            }
+        } catch (Exception ex) {
+            result = CommonUtil.setResult("1", ex.getMessage(), null);
+        }
+        return result;
+    }
+
+    /**
+     * roleCode验证
+     */
+    @RequestMapping(value = "/yzRoleCode1/{roleCode}/{roleId}", method = RequestMethod.GET)
+    public ResponseResult yzRoleCode(@PathVariable String roleCode,@PathVariable int roleId) {
+        try {
+            if(dao.yzroleCode1(roleCode,roleId)>0){
                 result = CommonUtil.setResult("1","存在重复code", null);
             }else{
                 result = CommonUtil.setResult("0","验证通过", null);

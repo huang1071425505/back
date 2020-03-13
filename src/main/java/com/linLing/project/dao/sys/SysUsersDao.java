@@ -13,7 +13,9 @@ public interface SysUsersDao extends JpaRepository<SysUsers, Integer>, JpaSpecif
      *验证userCode是否重复
      * @param userCode
      */
-    @Modifying
     @Query(value = "SELECT COUNT(*) FROM sys_users where user_code=?1",nativeQuery = true)
     int yzuserCode(String userCode);
+
+    @Query(value = "SELECT COUNT(*) FROM sys_users where user_code=?1 and user_id!=?2",nativeQuery = true)
+    int yzuserCode1(String userCode,int userId);
 }
