@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,9 +77,13 @@ public class XmProjectController extends SessionUtil {
     public ResponseResult page(@RequestBody PageParameter pageParameter) {
         try {
             //sql
-            String sqlStr ="SELECT * FROM xm_project where 1 = 1";
+            String sqlStr ="SELECT * FROM xm_project where  1=1 ";
             List<Object> list = new ArrayList<>();
             //查询
+            //当前登录人
+            if (!"".equals(pageParameter.getParameters().get("dqUser")) && null != pageParameter.getParameters().get("dqUser")) {
+                sqlStr += "\tAND project_student_id = "+getSysUsers().getUserId()+"\n";
+            }
             //状态
             if (!"".equals(pageParameter.getParameters().get("projectState")) && null != pageParameter.getParameters().get("projectState")) {
                 sqlStr += "\tAND project_state LIKE ?\n";
@@ -122,7 +127,11 @@ public class XmProjectController extends SessionUtil {
                 XmProject searchXmProject = dao.findById(xmProject.getId()).get();
                 result = CommonUtil.setResult("0", "修改成功", dao.save(CommonUtil.mergeObject(xmProject, searchXmProject)));
             } else {
+
                 xmProject.setProjectState("1");
+                xmProject.setProjectStudentId(getSysUsers().getUserId());
+                xmProject.setProjectStudentName(getSysUsers().getUserName());
+                xmProject.setCreateDate(new Timestamp(System.currentTimeMillis()));
                 XmProject data = dao.saveAndFlush(xmProject);
                 result = CommonUtil.setResult("0", "保存成功",data);
             }
@@ -138,7 +147,7 @@ public class XmProjectController extends SessionUtil {
     public ResponseResult distribute(XmProject xmProject,String userIds) {
         try {
             XmProject searchXmProject = dao.findById(xmProject.getId()).get();
-            searchXmProject.setProjectState("2");
+            xmProject.setProjectState("2");
             dao.save(CommonUtil.mergeObject(xmProject, searchXmProject));
             String[] arr = userIds.split(",");
             List<XmProjectExamine> xmProjectExamineList =new ArrayList<>();
@@ -165,7 +174,7 @@ public class XmProjectController extends SessionUtil {
     public ResponseResult approval(XmProject xmProject) {
         try {
             XmProject xmProject1 = dao.findById(xmProject.getId()).get();
-            xmProject1.setProjectState("4");
+            xmProject1.setProjectState("5");
             dao.save(xmProject1);
             result = CommonUtil.setResult("0", "立项成功",null);
         } catch (Exception ex) {
@@ -180,7 +189,7 @@ public class XmProjectController extends SessionUtil {
     public ResponseResult end(XmProject xmProject) {
         try {
             XmProject xmProject1 = dao.findById(xmProject.getId()).get();
-            xmProject1.setProjectState("5");
+            xmProject1.setProjectState("6");
             dao.save(xmProject1);
             result = CommonUtil.setResult("0", "项目结束",null);
         } catch (Exception ex) {

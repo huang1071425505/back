@@ -52,17 +52,39 @@ public class XmProjectExamineController extends SessionUtil {
     public ResponseResult page(@RequestBody PageParameter pageParameter) {
         try {
             //sql
-            String sqlStr ="SELECT * FROM xm_project_examine  where 1 = 1";
+            String sqlStr ="SELECT\n" +
+                    "\te.*,\n" +
+                    "\tp.project_code,\n" +
+                    "\tp.project_year,\n" +
+                    "\tp.project_teacher_id,\n" +
+                    "\tp.project_student_name,\n" +
+                    "\tp.project_student_id,\n" +
+                    "\tp.project_name,\n" +
+                    "\tp.project_state\n" +
+                    "FROM\n" +
+                    "\txm_project_examine e\n" +
+                    "\tleft join xm_project p on e.project_id=p.id\n" +
+                    "WHERE\n" +
+                    "\t1 = 1";
             List<Object> list = new ArrayList<>();
             //查询
+            //当前登录人
+            if (!"".equals(pageParameter.getParameters().get("dqUser")) && null != pageParameter.getParameters().get("dqUser")) {
+                sqlStr += "\tAND e.user_id = "+getSysUsers().getUserId()+"\n";
+            }
             //项目ID
             if (!"".equals(pageParameter.getParameters().get("projectId")) && null != pageParameter.getParameters().get("projectId")) {
-                sqlStr += "\tAND project_id = ?\n";
+                sqlStr += "\tAND e.project_id = ?\n";
                 list.add(pageParameter.getParameters().get("projectId"));
+            }
+            //项目名称
+            if (!"".equals(pageParameter.getParameters().get("projectName")) && null != pageParameter.getParameters().get("projectName")) {
+                sqlStr += "\tAND p.project_name LIKE ?\n";
+                list.add("%" + pageParameter.getParameters().get("projectName") + "%");
             }
             //评审状态
             if (!"".equals(pageParameter.getParameters().get("examineState")) && null != pageParameter.getParameters().get("examineState")) {
-                sqlStr += "\tAND examine_state = ?\n";
+                sqlStr += "\tAND e.examine_state = ?\n";
                 list.add(pageParameter.getParameters().get("examineState"));
             }
             final Pages pages = dataBase.findSql(sqlStr, list.toArray(), pageParameter.getPage(), pageParameter.getSize(), pageParameter.getSort(), pageParameter.getDir());
@@ -85,7 +107,7 @@ public class XmProjectExamineController extends SessionUtil {
                 XmProjectExamine xmProjectExamine1 = dao.save(CommonUtil.mergeObject(xmProjectExamine, searchXmProjectExamine));
                 if(dao.findOneByProjectIdAndExamineState(xmProjectExamine.getProjectId())==0){
                     XmProject xmProject = xmProjectDao.findById(xmProjectExamine.getProjectId()).get();
-                    xmProject.setProjectState("3");
+                    xmProject.setProjectState("4");
                     xmProjectDao.save(xmProject);
                 }
                 result = CommonUtil.setResult("0", "修改成功",xmProjectExamine1);

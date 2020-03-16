@@ -1,6 +1,7 @@
 package com.linLing.project.po;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
@@ -9,20 +10,21 @@ public class XmProject {
     private Integer id;
     private String projectCode;
     private String projectName;
-    private String projectYear;
+    private Integer projectYear;
     private String projectField;
-    private String projectStudentId;
+    private Integer projectStudentId;
     private String projectStudentName;
-    private String projectTeacherId;
+    private Integer projectTeacherId;
     private String projectTeacherName;
     private String projectFunds;
     private String projectIntroduce;
     private String projectRemark;
     private String acceptanceOpinion;
+    private Timestamp createDate;
     private String projectState;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
@@ -33,7 +35,7 @@ public class XmProject {
     }
 
     @Basic
-    @Column(name = "project_code", nullable = true, length = 255)
+    @Column(name = "project_code")
     public String getProjectCode() {
         return projectCode;
     }
@@ -43,7 +45,7 @@ public class XmProject {
     }
 
     @Basic
-    @Column(name = "project_name", nullable = true, length = 255)
+    @Column(name = "project_name")
     public String getProjectName() {
         return projectName;
     }
@@ -53,17 +55,17 @@ public class XmProject {
     }
 
     @Basic
-    @Column(name = "project_year", nullable = true, length = 255)
-    public String getProjectYear() {
+    @Column(name = "project_year")
+    public Integer getProjectYear() {
         return projectYear;
     }
 
-    public void setProjectYear(String projectYear) {
+    public void setProjectYear(Integer projectYear) {
         this.projectYear = projectYear;
     }
 
     @Basic
-    @Column(name = "project_field", nullable = true, length = 255)
+    @Column(name = "project_field")
     public String getProjectField() {
         return projectField;
     }
@@ -73,17 +75,17 @@ public class XmProject {
     }
 
     @Basic
-    @Column(name = "project_student_id", nullable = true, length = 255)
-    public String getProjectStudentId() {
+    @Column(name = "project_student_id")
+    public Integer getProjectStudentId() {
         return projectStudentId;
     }
 
-    public void setProjectStudentId(String projectStudentId) {
+    public void setProjectStudentId(Integer projectStudentId) {
         this.projectStudentId = projectStudentId;
     }
 
     @Basic
-    @Column(name = "project_student_name", nullable = true, length = 255)
+    @Column(name = "project_student_name")
     public String getProjectStudentName() {
         return projectStudentName;
     }
@@ -93,17 +95,17 @@ public class XmProject {
     }
 
     @Basic
-    @Column(name = "project_teacher_id", nullable = true, length = 255)
-    public String getProjectTeacherId() {
+    @Column(name = "project_teacher_id")
+    public Integer getProjectTeacherId() {
         return projectTeacherId;
     }
 
-    public void setProjectTeacherId(String projectTeacherId) {
+    public void setProjectTeacherId(Integer projectTeacherId) {
         this.projectTeacherId = projectTeacherId;
     }
 
     @Basic
-    @Column(name = "project_teacher_name", nullable = true, length = 255)
+    @Column(name = "project_teacher_name")
     public String getProjectTeacherName() {
         return projectTeacherName;
     }
@@ -113,7 +115,7 @@ public class XmProject {
     }
 
     @Basic
-    @Column(name = "project_funds", nullable = true, length = 255)
+    @Column(name = "project_funds")
     public String getProjectFunds() {
         return projectFunds;
     }
@@ -123,7 +125,7 @@ public class XmProject {
     }
 
     @Basic
-    @Column(name = "project_introduce", nullable = true, length = 255)
+    @Column(name = "project_introduce")
     public String getProjectIntroduce() {
         return projectIntroduce;
     }
@@ -133,7 +135,7 @@ public class XmProject {
     }
 
     @Basic
-    @Column(name = "project_remark", nullable = true, length = 255)
+    @Column(name = "project_remark")
     public String getProjectRemark() {
         return projectRemark;
     }
@@ -143,7 +145,7 @@ public class XmProject {
     }
 
     @Basic
-    @Column(name = "acceptance_opinion", nullable = true, length = 255)
+    @Column(name = "acceptance_opinion")
     public String getAcceptanceOpinion() {
         return acceptanceOpinion;
     }
@@ -153,7 +155,17 @@ public class XmProject {
     }
 
     @Basic
-    @Column(name = "project_state", nullable = true, length = 1)
+    @Column(name = "create_date")
+    public Timestamp getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Timestamp createDate) {
+        this.createDate = createDate;
+    }
+
+    @Basic
+    @Column(name = "project_state")
     public String getProjectState() {
         return projectState;
     }
@@ -166,26 +178,26 @@ public class XmProject {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        XmProject xmProject = (XmProject) o;
-        return id == xmProject.id &&
-                Objects.equals(projectCode, xmProject.projectCode) &&
-                Objects.equals(projectName, xmProject.projectName) &&
-                Objects.equals(projectYear, xmProject.projectYear) &&
-                Objects.equals(projectField, xmProject.projectField) &&
-                Objects.equals(projectStudentId, xmProject.projectStudentId) &&
-                Objects.equals(projectStudentName, xmProject.projectStudentName) &&
-                Objects.equals(projectTeacherId, xmProject.projectTeacherId) &&
-                Objects.equals(projectTeacherName, xmProject.projectTeacherName) &&
-                Objects.equals(projectFunds, xmProject.projectFunds) &&
-                Objects.equals(projectIntroduce, xmProject.projectIntroduce) &&
-                Objects.equals(projectRemark, xmProject.projectRemark) &&
-                Objects.equals(acceptanceOpinion, xmProject.acceptanceOpinion) &&
-                Objects.equals(projectState, xmProject.projectState);
+        XmProject that = (XmProject) o;
+        return id == that.id &&
+                Objects.equals(projectCode, that.projectCode) &&
+                Objects.equals(projectName, that.projectName) &&
+                Objects.equals(projectYear, that.projectYear) &&
+                Objects.equals(projectField, that.projectField) &&
+                Objects.equals(projectStudentId, that.projectStudentId) &&
+                Objects.equals(projectStudentName, that.projectStudentName) &&
+                Objects.equals(projectTeacherId, that.projectTeacherId) &&
+                Objects.equals(projectTeacherName, that.projectTeacherName) &&
+                Objects.equals(projectFunds, that.projectFunds) &&
+                Objects.equals(projectIntroduce, that.projectIntroduce) &&
+                Objects.equals(projectRemark, that.projectRemark) &&
+                Objects.equals(acceptanceOpinion, that.acceptanceOpinion) &&
+                Objects.equals(createDate, that.createDate) &&
+                Objects.equals(projectState, that.projectState);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, projectCode, projectName, projectYear, projectField, projectStudentId, projectStudentName, projectTeacherId, projectTeacherName, projectFunds, projectIntroduce, projectRemark, acceptanceOpinion, projectState);
+        return Objects.hash(id, projectCode, projectName, projectYear, projectField, projectStudentId, projectStudentName, projectTeacherId, projectTeacherName, projectFunds, projectIntroduce, projectRemark, acceptanceOpinion, createDate , projectState);
     }
 }
-

@@ -6,7 +6,7 @@
   <session-factory>
     <property name="connection.url">jdbc:mysql://localhost:3306/linling</property>
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-      <mapping class="com.linLing.project.po.SysUsers"/>
+    <mapping class="com.linLing.project.po.SysUsers"/>
       <mapping class="com.linLing.project.po.ScCourse"/>
       <mapping class="com.linLing.project.po.ScNews"/>
       <mapping class="com.linLing.project.po.ScPolicy"/>
@@ -14,7 +14,7 @@
       <mapping class="com.linLing.project.po.XmProject"/>
       <mapping class="com.linLing.project.po.XmProjectExamine"/>
       <mapping class="com.linLing.project.po.XmProjectProcess"/>
-      <!-- <property name="connection.username"/> -->
+    <!-- <property name="connection.username"/> -->
     <!-- <property name="connection.password"/> -->
 
     <!-- DB schema will be updated if needed -->
