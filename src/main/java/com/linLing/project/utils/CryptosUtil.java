@@ -30,11 +30,11 @@ public class CryptosUtil {
     /**
      * 过期时间
      */
-    private static final long EFFECTIVE_TIME=20*60*1000;
+    private static final long EFFECTIVE_TIME=1000000000;
     /**
      * 秘钥
      */
-    private static final String TOKEN_PASSWORD="linLingIsPig";
+    private static final String TOKEN_PASSWORD="linLing";
 
     /**
      *
