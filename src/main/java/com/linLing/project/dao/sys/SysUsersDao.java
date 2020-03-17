@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface SysUsersDao extends JpaRepository<SysUsers, Integer>, JpaSpecificationExecutor<SysUsers>{
     SysUsers findOneByUserCode(String userCode);
     SysUsers findOneByUserId(int userId);
@@ -18,4 +20,10 @@ public interface SysUsersDao extends JpaRepository<SysUsers, Integer>, JpaSpecif
 
     @Query(value = "SELECT COUNT(*) FROM sys_users where user_code=?1 and user_id!=?2",nativeQuery = true)
     int yzuserCode1(String userCode,int userId);
+
+    /**
+     * 获取教师list
+     */
+    List<SysUsers> findByUserStateAndAndUserRoleId(String userState,int userRoleId);
+
 }

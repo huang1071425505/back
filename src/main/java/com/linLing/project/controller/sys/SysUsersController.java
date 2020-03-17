@@ -34,6 +34,19 @@ public class SysUsersController extends SessionUtil {
     private DataBase dataBase;
 
     /**
+     * 获取单条数据
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseResult info(@PathVariable int id) {
+        try {
+            result = CommonUtil.setResult("0", "查询成功", dao.findById(id));
+        } catch (Exception ex) {
+            result = CommonUtil.setResult("1", ex.getMessage(), null);
+        }
+        return result;
+    }
+
+    /**
      * 获取本人信息
      */
     @RequestMapping(value = "/myInfo", method = RequestMethod.GET)
@@ -41,6 +54,19 @@ public class SysUsersController extends SessionUtil {
         try {
             int userId= getSysUsers().getUserId();
             result = CommonUtil.setResult("0", "查询成功", dao.findById(userId));
+        } catch (Exception ex) {
+            result = CommonUtil.setResult("1", ex.getMessage(), null);
+        }
+        return result;
+    }
+
+    /**
+     * 获取教师
+     */
+    @RequestMapping(value = "/teacherList", method = RequestMethod.GET)
+    public ResponseResult teacherList() {
+        try {
+            result = CommonUtil.setResult("0", "查询成功", dao.findByUserStateAndAndUserRoleId("1",2));
         } catch (Exception ex) {
             result = CommonUtil.setResult("1", ex.getMessage(), null);
         }
@@ -84,22 +110,24 @@ public class SysUsersController extends SessionUtil {
     /**
      * 用户信息（冻结/启用）
      */
-    @RequestMapping(value = "/state/{id}", method = RequestMethod.GET)
-    public ResponseResult delete(@PathVariable int id) {
+    @RequestMapping(value = "/state/{ids}/{userState}", method = RequestMethod.GET)
+    public ResponseResult delete(@PathVariable String ids,@PathVariable String userState) {
         try {
-            SysUsers sysUsers = dao.findById(id).get();
-            if ("0".equals(sysUsers.getUserState())){
-                sysUsers.setUserState("1");
-            }else{
-                sysUsers.setUserState("0");
+            String[] arr = ids.split(",");
+            List<SysUsers> sysUsersList =new ArrayList<>();
+            for(String userId:arr) {
+                SysUsers sysUsers = dao.findById(Integer.parseInt(userId)).get();
+                sysUsers.setUserState(userState);
+                sysUsersList.add(sysUsers);
             }
-            dao.save(sysUsers);
-            result = CommonUtil.setResult("0", "删除成功", "");
+            dao.saveAll(sysUsersList);
+            result = CommonUtil.setResult("0", "状态更新成功", "");
         } catch (Exception ex) {
             result = CommonUtil.setResult("1", ex.getMessage(), null);
         }
         return result;
     }
+
 
     /**
      * 获取用户列表
@@ -108,13 +136,24 @@ public class SysUsersController extends SessionUtil {
     public ResponseResult userList(@RequestBody PageParameter pageParameter) {
         try {
             //sql
-            String sqlStr ="SELECT * FROM sys_users where user_state = 1";
+            String sqlStr ="SELECT u.*,r.role_name FROM sys_users u left join sys_role r on r.role_id=u.user_role_id where 1 = 1";
             List<Object> list = new ArrayList<>();
             //查询
             //用户名称
             if (!"".equals(pageParameter.getParameters().get("userName")) && null != pageParameter.getParameters().get("userName")) {
-                sqlStr += "\tAND user_name LIKE ?\n";
+                sqlStr += "\tAND u.user_name LIKE ?\n";
                 list.add("%" + pageParameter.getParameters().get("userName") + "%");
+            }
+            //模糊查询
+            if (!"".equals(pageParameter.getParameters().get("word")) && null != pageParameter.getParameters().get("word")) {
+                sqlStr += "\tAND (u.user_name LIKE ? or u.user_code LIKE ? ) \n";
+                list.add("%" + pageParameter.getParameters().get("word") + "%");
+                list.add("%" + pageParameter.getParameters().get("word") + "%");
+            }
+            //状态查询
+            if (!"".equals(pageParameter.getParameters().get("userState")) && null != pageParameter.getParameters().get("userState")) {
+                sqlStr += "\tAND u.user_state = ?\n";
+                list.add(pageParameter.getParameters().get("userState"));
             }
             final Pages pages = dataBase.findSql(sqlStr, list.toArray(), pageParameter.getPage(), pageParameter.getSize(), pageParameter.getSort(), pageParameter.getDir());
             result = CommonUtil.setResult("0", "查询成功", pages);

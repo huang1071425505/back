@@ -42,6 +42,19 @@ public class SysRoleController extends SessionUtil {
     }
 
     /**
+     * 获取有效数据
+     */
+    @RequestMapping(value = "/effective", method = RequestMethod.GET)
+    public ResponseResult effective() {
+        try {
+            result = CommonUtil.setResult("0", "查询成功", dao.findByRoleState("1"));
+        } catch (Exception ex) {
+            result = CommonUtil.setResult("1", ex.getMessage(), null);
+        }
+        return result;
+    }
+
+    /**
      * roleCode验证
      */
     @RequestMapping(value = "/yzRoleCode/{roleCode}", method = RequestMethod.GET)
