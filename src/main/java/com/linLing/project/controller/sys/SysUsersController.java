@@ -2,11 +2,9 @@ package com.linLing.project.controller.sys;
 
 
 import com.linLing.project.dao.DataBase;
+import com.linLing.project.dao.sys.SysUserRoleDao;
 import com.linLing.project.dao.sys.SysUsersDao;
-import com.linLing.project.po.PageParameter;
-import com.linLing.project.po.Pages;
-import com.linLing.project.po.ResponseResult;
-import com.linLing.project.po.SysUsers;
+import com.linLing.project.po.*;
 import com.linLing.project.utils.CommonUtil;
 import com.linLing.project.utils.CryptosUtil;
 import com.linLing.project.utils.SessionUtil;
@@ -14,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,13 +30,17 @@ public class SysUsersController extends SessionUtil {
     @Autowired
     private DataBase dataBase;
 
+    @Autowired
+    private SysUserRoleDao sysUserRoleDao;
+
+
     /**
      * 获取单条数据
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseResult info(@PathVariable int id) {
         try {
-            result = CommonUtil.setResult("0", "查询成功", dao.findById(id));
+            result = CommonUtil.setResult("0", "查询成功", dao.findUserDetails(id));
         } catch (Exception ex) {
             result = CommonUtil.setResult("1", ex.getMessage(), null);
         }
@@ -66,7 +67,7 @@ public class SysUsersController extends SessionUtil {
     @RequestMapping(value = "/teacherList", method = RequestMethod.GET)
     public ResponseResult teacherList() {
         try {
-            result = CommonUtil.setResult("0", "查询成功", dao.findByUserStateAndAndUserRoleId("1",2));
+            result = CommonUtil.setResult("0", "查询成功", dao.findByUserStateAndAndUserRoleId(2));
         } catch (Exception ex) {
             result = CommonUtil.setResult("1", ex.getMessage(), null);
         }
@@ -136,7 +137,16 @@ public class SysUsersController extends SessionUtil {
     public ResponseResult userList(@RequestBody PageParameter pageParameter) {
         try {
             //sql
-            String sqlStr ="SELECT u.*,r.role_name FROM sys_users u left join sys_role r on r.role_id=u.user_role_id where 1 = 1";
+            String sqlStr ="SELECT\n" +
+                    "\tu.*,\n" +
+                    "\tr.role_id,\n" +
+                    "\tr.role_name\n" +
+                    "FROM\n" +
+                    "\tsys_users u\n" +
+                    "\tLEFT join sys_user_role s on s.user_id=u.user_id \n" +
+                    "\tLEFT JOIN sys_role r ON r.role_id = s.role_id \n" +
+                    "WHERE\n" +
+                    "\t1 = 1";
             List<Object> list = new ArrayList<>();
             //查询
             //用户名称
@@ -167,15 +177,19 @@ public class SysUsersController extends SessionUtil {
      * 用户信息保存
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public ResponseResult save(SysUsers sysUsers) {
+    public ResponseResult save(SysUsers sysUsers,String roleIds) {
         try {
+
             if (sysUsers.getUserId() != null) {
+                bindRole(sysUsers.getUserId(),roleIds);
                 SysUsers searchSysUsers = dao.findById(sysUsers.getUserId()).get();
                 result = CommonUtil.setResult("0", "修改成功", dao.save(CommonUtil.mergeObject(sysUsers, searchSysUsers)));
             } else {
+
                 sysUsers.setUserState("1");
                 sysUsers.setUserPassword("7l7ins3to6v3hcgcqri6iid10sfpq3ht");
                 SysUsers data = dao.saveAndFlush(sysUsers);
+                bindRole(data.getUserId(),roleIds);
                 result = CommonUtil.setResult("0", "保存成功",data);
             }
         } catch (Exception ex) {
@@ -183,12 +197,28 @@ public class SysUsersController extends SessionUtil {
         }
         return result;
     }
-
     /**
-     * 用户登录
-     * userCode 用户名
-     * password 密码
+     * 绑定角色
      */
+    private void bindRole(int userId,String roleIds) {
+        if(roleIds != null && !"".equals(roleIds)){
+            String[] arr = roleIds.split(",");
+            List<SysUserRole> sysUserRoleList =new ArrayList<>();
+            for(String roleId:arr) {
+                SysUserRole sysUserRole = new SysUserRole();
+                sysUserRole.setUserId(userId);
+                sysUserRole.setRoleId(Integer.parseInt(roleId));
+                sysUserRoleList.add(sysUserRole);
+            }
+            sysUserRoleDao.saveAll(sysUserRoleList);
+        }
+    }
+
+        /**
+         * 用户登录
+         * userCode 用户名
+         * password 密码
+         */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseResult login(String userCode, String password) {
         try {

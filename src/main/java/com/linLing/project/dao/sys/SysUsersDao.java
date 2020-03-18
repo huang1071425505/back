@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SysUsersDao extends JpaRepository<SysUsers, Integer>, JpaSpecificationExecutor<SysUsers>{
     SysUsers findOneByUserCode(String userCode);
@@ -24,6 +25,37 @@ public interface SysUsersDao extends JpaRepository<SysUsers, Integer>, JpaSpecif
     /**
      * 获取教师list
      */
-    List<SysUsers> findByUserStateAndAndUserRoleId(String userState,int userRoleId);
+    @Query(value = "SELECT\n" +
+            "\tu.user_password userPassword,\n" +
+            "\tu.user_phone userPhone,\n" +
+            "\tu.user_details userDetails,\n" +
+            "\tu.user_id userId,\n" +
+            "\tu.user_name userName,\n" +
+            "\tu.user_code userCode,\n" +
+            "\ts.role_id roleId\n" +
+            "FROM\n" +
+            "\tsys_users u\n" +
+            "\tLEFT JOIN sys_user_role s ON s.user_id = u.user_id \n" +
+            "WHERE\n" +
+            " u.user_state ='1'" +
+            "\t and s.role_id =?1",nativeQuery = true)
+    List<Map<String, Object>> findByUserStateAndAndUserRoleId(int userRoleId);
 
+    /**
+     * 获取用户详情
+     */
+    @Query(value = "SELECT\n" +
+            "\tu.user_password userPassword,\n" +
+            "\tu.user_phone userPhone,\n" +
+            "\tu.user_details userDetails,\n" +
+            "\tu.user_id userId,\n" +
+            "\tu.user_name userName,\n" +
+            "\tu.user_code userCode,\n" +
+            "\ts.role_id roleId\n" +
+            "FROM\n" +
+            "\tsys_users u\n" +
+            "\tLEFT JOIN sys_user_role s ON s.user_id = u.user_id \n" +
+            "WHERE\n" +
+            "\tu.user_id =?1",nativeQuery = true)
+    Map<String, Object> findUserDetails(int userId);
 }

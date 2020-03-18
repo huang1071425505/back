@@ -12,7 +12,6 @@ public class SysUsers {
     private String userPassword;
     private String userState;
     private String userPhone;
-    private Integer userRoleId;
     private String userDetails;
 
     @Id
@@ -77,16 +76,6 @@ public class SysUsers {
     }
 
     @Basic
-    @Column(name = "user_role_id", nullable = true)
-    public Integer getUserRoleId() {
-        return userRoleId;
-    }
-
-    public void setUserRoleId(Integer userRoleId) {
-        this.userRoleId = userRoleId;
-    }
-
-    @Basic
     @Column(name = "user_details", nullable = true, length = -1)
     public String getUserDetails() {
         return userDetails;
@@ -107,12 +96,11 @@ public class SysUsers {
                 Objects.equals(userPassword, sysUsers.userPassword) &&
                 Objects.equals(userState, sysUsers.userState) &&
                 Objects.equals(userPhone, sysUsers.userPhone) &&
-                Objects.equals(userRoleId, sysUsers.userRoleId) &&
                 Objects.equals(userDetails, sysUsers.userDetails);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, userCode, userName, userPassword, userPhone, userRoleId, userDetails, userState);
+        return Objects.hash(userId, userCode, userName, userPassword, userPhone, userDetails, userState);
     }
 }
