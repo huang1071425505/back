@@ -9,6 +9,7 @@ public class SysMenu {
     private Integer id;
     private String menuName;
     private String menuUrl;
+    private String menuIcon;
     private Integer menuPid;
     private String menuState;
     private Integer menuOrder;
@@ -45,6 +46,16 @@ public class SysMenu {
     }
 
     @Basic
+    @Column(name = "menu_icon")
+    public String getMenuIcon() {
+        return menuIcon;
+    }
+
+    public void setMenuIcon(String menuIcon) {
+        this.menuIcon = menuIcon;
+    }
+
+    @Basic
     @Column(name = "menu_pid")
     public Integer getMenuPid() {
         return menuPid;
@@ -72,13 +83,14 @@ public class SysMenu {
         return id == sysMenu.id &&
                 Objects.equals(menuName, sysMenu.menuName) &&
                 Objects.equals(menuUrl, sysMenu.menuUrl) &&
+                Objects.equals(menuIcon, sysMenu.menuIcon) &&
                 Objects.equals(menuPid, sysMenu.menuPid) &&
                 Objects.equals(menuState, sysMenu.menuState);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, menuName, menuUrl, menuPid, menuState);
+        return Objects.hash(id, menuName, menuUrl, menuIcon, menuPid, menuState);
     }
 
     @Basic
