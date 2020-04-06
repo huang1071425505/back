@@ -51,6 +51,40 @@ public class XmProjectController extends SessionUtil {
     }
 
     /**
+     * projectCode验证
+     */
+    @RequestMapping(value = "/yzProjectCode/{projectCode}", method = RequestMethod.GET)
+    public ResponseResult yzProjectCode(@PathVariable String projectCode) {
+        try {
+            if(dao.yzProjectCode(projectCode)>0){
+                result = CommonUtil.setResult("1","存在重复code", null);
+            }else{
+                result = CommonUtil.setResult("0","验证通过", null);
+            }
+        } catch (Exception ex) {
+            result = CommonUtil.setResult("1", ex.getMessage(), null);
+        }
+        return result;
+    }
+
+    /**
+     * projectCode验证
+     */
+    @RequestMapping(value = "/yzProjectCode1/{projectCode}/{roleId}", method = RequestMethod.GET)
+    public ResponseResult yzProjectCode(@PathVariable String projectCode,@PathVariable int id) {
+        try {
+            if(dao.yzProjectCode1(projectCode,id)>0){
+                result = CommonUtil.setResult("1","存在重复code", null);
+            }else{
+                result = CommonUtil.setResult("0","验证通过", null);
+            }
+        } catch (Exception ex) {
+            result = CommonUtil.setResult("1", ex.getMessage(), null);
+        }
+        return result;
+    }
+
+    /**
      * 信息（冻结/启用）
      */
     @RequestMapping(value = "/state/{id}", method = RequestMethod.GET)
@@ -192,6 +226,22 @@ public class XmProjectController extends SessionUtil {
             xmProject1.setProjectState("6");
             dao.save(xmProject1);
             result = CommonUtil.setResult("0", "项目结束",null);
+        } catch (Exception ex) {
+            result = CommonUtil.setResult("1", ex.getMessage(), null);
+        }
+        return result;
+    }
+
+    /**
+     * 项目验收
+     */
+    @RequestMapping(value = "/conclud", method = RequestMethod.POST)
+    public ResponseResult conclud(XmProject xmProject) {
+        try {
+            XmProject xmProject1 = dao.findById(xmProject.getId()).get();
+            xmProject1.setProjectState("7");
+            dao.save(xmProject1);
+            result = CommonUtil.setResult("0", "验收成功",null);
         } catch (Exception ex) {
             result = CommonUtil.setResult("1", ex.getMessage(), null);
         }

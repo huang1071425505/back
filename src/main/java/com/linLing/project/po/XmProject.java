@@ -10,7 +10,7 @@ public class XmProject {
     private Integer id;
     private String projectCode;
     private String projectName;
-    private Integer projectYear;
+    private String projectYear;
     private String projectField;
     private Integer projectStudentId;
     private String projectStudentName;
@@ -56,11 +56,11 @@ public class XmProject {
 
     @Basic
     @Column(name = "project_year")
-    public Integer getProjectYear() {
+    public String getProjectYear() {
         return projectYear;
     }
 
-    public void setProjectYear(Integer projectYear) {
+    public void setProjectYear(String projectYear) {
         this.projectYear = projectYear;
     }
 

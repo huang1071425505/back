@@ -62,12 +62,12 @@ public class SysUsersController extends SessionUtil {
     }
 
     /**
-     * 获取教师
+     * 获取角色相关
      */
-    @RequestMapping(value = "/teacherList", method = RequestMethod.GET)
-    public ResponseResult teacherList() {
+    @RequestMapping(value = "/roleList/{roleId}", method = RequestMethod.GET)
+    public ResponseResult roleList(@PathVariable int roleId) {
         try {
-            result = CommonUtil.setResult("0", "查询成功", dao.findByUserStateAndAndUserRoleId(2));
+            result = CommonUtil.setResult("0", "查询成功", dao.findByUserStateAndAndUserRoleId(roleId));
         } catch (Exception ex) {
             result = CommonUtil.setResult("1", ex.getMessage(), null);
         }

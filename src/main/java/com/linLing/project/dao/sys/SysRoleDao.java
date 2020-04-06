@@ -13,10 +13,10 @@ public interface SysRoleDao extends JpaRepository<SysRole, Integer>, JpaSpecific
      *验证userCode是否重复
      * @param roleCode
      */
-    @Query(value = "SELECT COUNT(*) FROM sys_role where role_code=?1",nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM sys_role where role_code=?1 and role_state!='0'",nativeQuery = true)
     int yzroleCode(String roleCode);
 
-    @Query(value = "SELECT COUNT(*) FROM sys_role where role_code=?1 and role_id!=?2",nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM sys_role where role_code=?1 and role_id!=?2 and role_state!='0'",nativeQuery = true)
     int yzroleCode1(String roleCode,int roleId);
 
     List<SysRole> findByRoleState(String userState);

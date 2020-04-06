@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +69,7 @@ public class XmProjectProcessController extends SessionUtil {
     public ResponseResult page(@RequestBody PageParameter pageParameter) {
         try {
             //sql
-            String sqlStr ="SELECT * FROM xm_project_process where record_state = 1";
+            String sqlStr ="SELECT * FROM xm_project_process where record_state = 1 and user_id="+getSysUsers().getUserId()+"";
             List<Object> list = new ArrayList<>();
             //查询
             //项目ID
@@ -100,6 +101,9 @@ public class XmProjectProcessController extends SessionUtil {
                 result = CommonUtil.setResult("0", "修改成功", dao.save(CommonUtil.mergeObject(xmProjectProcess, searchXmProjectProcess)));
             } else {
                 xmProjectProcess.setRecordState("1");
+                xmProjectProcess.setUserId(getSysUsers().getUserId());
+                xmProjectProcess.setUserName(getSysUsers().getUserName());
+                xmProjectProcess.setRecordDate(new Timestamp(System.currentTimeMillis()));
                 XmProjectProcess data = dao.saveAndFlush(xmProjectProcess);
                 result = CommonUtil.setResult("0", "保存成功",data);
             }

@@ -16,17 +16,16 @@ public interface SysUsersDao extends JpaRepository<SysUsers, Integer>, JpaSpecif
      *验证userCode是否重复
      * @param userCode
      */
-    @Query(value = "SELECT COUNT(*) FROM sys_users where user_code=?1",nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM sys_users where user_code=?1 and user_state!='0'",nativeQuery = true)
     int yzuserCode(String userCode);
 
-    @Query(value = "SELECT COUNT(*) FROM sys_users where user_code=?1 and user_id!=?2",nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM sys_users where user_code=?1 and user_id!=?2 and user_state!='0'",nativeQuery = true)
     int yzuserCode1(String userCode,int userId);
 
     /**
      * 获取教师list
      */
     @Query(value = "SELECT\n" +
-            "\tu.user_password userPassword,\n" +
             "\tu.user_phone userPhone,\n" +
             "\tu.user_details userDetails,\n" +
             "\tu.user_id userId,\n" +
@@ -45,7 +44,6 @@ public interface SysUsersDao extends JpaRepository<SysUsers, Integer>, JpaSpecif
      * 获取用户详情
      */
     @Query(value = "SELECT\n" +
-            "\tu.user_password userPassword,\n" +
             "\tu.user_phone userPhone,\n" +
             "\tu.user_details userDetails,\n" +
             "\tu.user_id userId,\n" +
