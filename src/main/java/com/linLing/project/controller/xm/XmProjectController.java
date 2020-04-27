@@ -128,7 +128,7 @@ public class XmProjectController extends SessionUtil {
             //查询
             //当前登录人
             if (!"".equals(pageParameter.getParameters().get("dqUser")) && null != pageParameter.getParameters().get("dqUser")) {
-                sqlStr += "\tAND x.project_student_id = "+getSysUsers().getUserId()+"\n";
+                sqlStr += "\tAND (x.project_student_id = "+getSysUsers().getUserId()+" or x.project_teacher_id = "+getSysUsers().getUserId()+")\n";
             }
             //状态
             if (!"".equals(pageParameter.getParameters().get("projectState")) && null != pageParameter.getParameters().get("projectState")) {
