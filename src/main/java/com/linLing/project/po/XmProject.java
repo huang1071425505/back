@@ -11,7 +11,7 @@ public class XmProject {
     private String projectCode;
     private String projectName;
     private String projectYear;
-    private String projectField;
+    private Integer projectField;
     private Integer projectStudentId;
     private String projectStudentName;
     private Integer projectTeacherId;
@@ -66,11 +66,11 @@ public class XmProject {
 
     @Basic
     @Column(name = "project_field")
-    public String getProjectField() {
+    public Integer getProjectField() {
         return projectField;
     }
 
-    public void setProjectField(String projectField) {
+    public void setProjectField(Integer projectField) {
         this.projectField = projectField;
     }
 

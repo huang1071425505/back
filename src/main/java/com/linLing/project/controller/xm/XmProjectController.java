@@ -7,7 +7,6 @@ import com.linLing.project.dao.xm.XmProjectExamineDao;
 import com.linLing.project.po.*;
 import com.linLing.project.utils.CommonUtil;
 import com.linLing.project.utils.SessionUtil;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -85,6 +84,19 @@ public class XmProjectController extends SessionUtil {
     }
 
     /**
+     * 按项目所属领域分类
+     */
+    @RequestMapping(value = "/fieldClassification", method = RequestMethod.GET)
+    public ResponseResult fieldClassification() {
+        try {
+            result = CommonUtil.setResult("0", "查询成功", dao.findByProjectField());
+        } catch (Exception ex) {
+            result = CommonUtil.setResult("1", ex.getMessage(), null);
+        }
+        return result;
+    }
+
+    /**
      * 信息（冻结/启用）
      */
     @RequestMapping(value = "/state/{id}", method = RequestMethod.GET)
@@ -111,36 +123,36 @@ public class XmProjectController extends SessionUtil {
     public ResponseResult page(@RequestBody PageParameter pageParameter) {
         try {
             //sql
-            String sqlStr ="SELECT * FROM xm_project where  1=1 ";
+            String sqlStr ="SELECT x.*,d.dic_name FROM xm_project x left join  sys_dictionary d on d.id = x.project_field where  1=1 ";
             List<Object> list = new ArrayList<>();
             //查询
             //当前登录人
             if (!"".equals(pageParameter.getParameters().get("dqUser")) && null != pageParameter.getParameters().get("dqUser")) {
-                sqlStr += "\tAND project_student_id = "+getSysUsers().getUserId()+"\n";
+                sqlStr += "\tAND x.project_student_id = "+getSysUsers().getUserId()+"\n";
             }
             //状态
             if (!"".equals(pageParameter.getParameters().get("projectState")) && null != pageParameter.getParameters().get("projectState")) {
-                sqlStr += "\tAND project_state LIKE ?\n";
+                sqlStr += "\tAND x.project_state LIKE ?\n";
                 list.add("%" + pageParameter.getParameters().get("projectState") + "%");
             }
             //code
             if (!"".equals(pageParameter.getParameters().get("projectCode")) && null != pageParameter.getParameters().get("projectCode")) {
-                sqlStr += "\tAND project_code LIKE ?\n";
+                sqlStr += "\tAND x.project_code LIKE ?\n";
                 list.add("%" + pageParameter.getParameters().get("projectCode") + "%");
             }
             //项目名称
             if (!"".equals(pageParameter.getParameters().get("projectName")) && null != pageParameter.getParameters().get("projectName")) {
-                sqlStr += "\tAND project_name LIKE ?\n";
+                sqlStr += "\tAND x.project_name LIKE ?\n";
                 list.add("%" + pageParameter.getParameters().get("projectName") + "%");
             }
             //年度
             if (!"".equals(pageParameter.getParameters().get("projectYear")) && null != pageParameter.getParameters().get("projectYear")) {
-                sqlStr += "\tAND project_year = ?\n";
+                sqlStr += "\tAND x.project_year = ?\n";
                 list.add(pageParameter.getParameters().get("projectYear"));
             }
             //申报学生Id
             if (!"".equals(pageParameter.getParameters().get("projectStudentId")) && null != pageParameter.getParameters().get("projectStudentId")) {
-                sqlStr += "\tAND project_student_id = ?\n";
+                sqlStr += "\tAND x.project_student_id = ?\n";
                 list.add(pageParameter.getParameters().get("projectStudentId"));
             }
             final Pages pages = dataBase.findSql(sqlStr, list.toArray(), pageParameter.getPage(), pageParameter.getSize(), pageParameter.getSort(), pageParameter.getDir());

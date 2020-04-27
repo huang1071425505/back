@@ -17,6 +17,7 @@
       <mapping class="com.linLing.project.po.SysMenu"/>
       <mapping class="com.linLing.project.po.SysRolePermission"/>
       <mapping class="com.linLing.project.po.SysUserRole"/>
+      <mapping class="com.linLing.project.po.SysDictionary"/>
       <!-- <property name="connection.username"/> -->
     <!-- <property name="connection.password"/> -->
 
